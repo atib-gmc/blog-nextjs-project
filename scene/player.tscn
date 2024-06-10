@@ -1,7 +1,24 @@
-[gd_scene load_steps=15 format=3 uid="uid://qo5o4g8sxskp"]
+[gd_scene load_steps=24 format=3 uid="uid://qo5o4g8sxskp"]
 
 [ext_resource type="Script" path="res://script/player.gd" id="1_8ich7"]
 [ext_resource type="Texture2D" uid="uid://ciarla1ka8yo6" path="res://assets/characters/main character/walk and idle.png" id="1_el2l3"]
+[ext_resource type="Texture2D" uid="uid://dvyswfrb2tilj" path="res://assets/characters/main character/attack and die.png" id="2_pht1p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ea14s"]
+atlas = ExtResource("2_pht1p")
+region = Rect2(0, 72, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s3swy"]
+atlas = ExtResource("2_pht1p")
+region = Rect2(24, 72, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dwjg6"]
+atlas = ExtResource("2_pht1p")
+region = Rect2(48, 72, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_omnf1"]
+atlas = ExtResource("2_pht1p")
+region = Rect2(72, 72, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4e7pe"]
 atlas = ExtResource("1_el2l3")
@@ -47,6 +64,26 @@ region = Rect2(168, 48, 24, 24)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_ea14s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s3swy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dwjg6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_omnf1")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"death",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_4e7pe")
 }, {
 "duration": 1.0,
@@ -89,18 +126,72 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yqc2g"]
 size = Vector2(9.25, 10)
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_vxh0i"]
+polygon = PackedVector2Array(-4, -18, -3, -12, -3, -9, -2, -8, 3, -8, 1, -7, 2, -6, 1, -2, -2, -1, -3, 1, -5, 1, -5, -6, -4, -7, -6, -10, -7, -15)
+
+[sub_resource type="Animation" id="Animation_apwpt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_qiyl1"]
+resource_name = "idle"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8rhq2"]
+_data = {
+"RESET": SubResource("Animation_apwpt"),
+"idle": SubResource("Animation_qiyl1")
+}
+
 [node name="Player" type="CharacterBody2D"]
-collision_layer = 2
+collision_layer = 6
+collision_mask = 5
 script = ExtResource("1_8ich7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-1, -10)
 sprite_frames = SubResource("SpriteFrames_0jrd1")
-animation = &"run"
+animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.63008
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2(0.375, -5)
 shape = SubResource("RectangleShape2D_yqc2g")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_vxh0i")
+
+[node name="Death_timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8rhq2")
+}
+
+[connection signal="timeout" from="Death_timer" to="." method="_on_death_timer_timeout"]

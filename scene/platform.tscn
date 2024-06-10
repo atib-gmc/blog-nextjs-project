@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://buwve2k1n4r7k"]
+[gd_scene load_steps=4 format=3 uid="uid://buwve2k1n4r7k"]
 
 [ext_resource type="Texture2D" uid="uid://cwiffvf46dche" path="res://assets/2d/mainlev_build.png" id="1_88pnv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wunky"]
 size = Vector2(54, 16)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_c7wx1"]
+polygon = PackedVector2Array(-25, -8, 25, -8, 25, 7, -25, 7)
 
 [node name="Platform" type="AnimatableBody2D"]
 
@@ -15,3 +18,6 @@ one_way_collision = true
 texture = ExtResource("1_88pnv")
 region_enabled = true
 region_rect = Rect2(960, 192, 48, 16)
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_c7wx1")

@@ -10,5 +10,6 @@ func _on_body_entered(body):
 
 
 func _on_timer_timeout():
-	get_parent().get_node("Player").position = Vector2(10,-5)
+	get_parent().get_node("Player2").position = Vector2(10,-5)
+	
 	pass # Replace with function body.
