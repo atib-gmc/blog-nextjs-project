@@ -1,9 +1,10 @@
-[gd_scene load_steps=45 format=3 uid="uid://bn3mfna22kgms"]
+[gd_scene load_steps=50 format=3 uid="uid://bn3mfna22kgms"]
 
 [ext_resource type="Script" path="res://script/Zombie.gd" id="1_di6lo"]
 [ext_resource type="Texture2D" uid="uid://b1ohjicbliwm1" path="res://assets/2d/Zombie.png" id="1_y7d1e"]
 [ext_resource type="Script" path="res://scene/RayCastRight.gd" id="2_6peif"]
 [ext_resource type="Script" path="res://script/MyHitBox.gd" id="4_jthop"]
+[ext_resource type="Script" path="res://script/MyHurtBox.gd" id="5_rk7sj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cj1x4"]
 atlas = ExtResource("1_y7d1e")
@@ -125,6 +126,14 @@ region = Rect2(192, 64, 32, 32)
 atlas = ExtResource("1_y7d1e")
 region = Rect2(224, 64, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvfx7"]
+atlas = ExtResource("1_y7d1e")
+region = Rect2(0, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0m2s4"]
+atlas = ExtResource("1_y7d1e")
+region = Rect2(32, 160, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_dcpef"]
 animations = [{
 "frames": [{
@@ -236,16 +245,48 @@ animations = [{
 "loop": true,
 "name": &"run",
 "speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvfx7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0m2s4")
+}],
+"loop": false,
+"name": &"take_damage",
+"speed": 5.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_01xri"]
 radius = 8.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_nqb4r"]
-size = Vector2(13, 25)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s8ftq"]
-size = Vector2(83, 38)
+[sub_resource type="Animation" id="Animation_a6pwu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D/MyHitBox/CollisionShape2D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="Animation" id="Animation_u8sk7"]
 length = 0.7
@@ -287,7 +328,7 @@ tracks/2/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_d2oij"]
-length = 1.4
+length = 0.7
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -295,7 +336,7 @@ tracks/0/path = NodePath("AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1, 1.2),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6]
@@ -311,6 +352,20 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": ["death"]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.7),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_gk3lo"]
@@ -369,19 +424,20 @@ tracks/1/keys = {
 "values": ["run"]
 }
 
-[sub_resource type="Animation" id="Animation_a6pwu"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_sl4jw"]
+resource_name = "take_damage"
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D/MyHitBox/CollisionShape2D:disabled")
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [true]
+"values": [0, 1, 0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tvof1"]
@@ -390,8 +446,18 @@ _data = {
 "attack": SubResource("Animation_u8sk7"),
 "death": SubResource("Animation_d2oij"),
 "idle": SubResource("Animation_gk3lo"),
-"run": SubResource("Animation_mgnho")
+"run": SubResource("Animation_mgnho"),
+"take_damage": SubResource("Animation_sl4jw")
 }
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n5et1"]
+size = Vector2(20, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pxt81"]
+size = Vector2(13, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cbu6w"]
+size = Vector2(31, 26)
 
 [node name="Zombie" type="CharacterBody2D"]
 script = ExtResource("1_di6lo")
@@ -409,9 +475,7 @@ target_position = Vector2(0, 15)
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(3, -13)
 sprite_frames = SubResource("SpriteFrames_dcpef")
-animation = &"attack"
-autoplay = "idle"
-frame = 6
+animation = &"idle"
 
 [node name="MyHitBox" type="Area2D" parent="AnimatedSprite2D"]
 script = ExtResource("4_jthop")
@@ -422,19 +486,6 @@ shape = SubResource("CapsuleShape2D_01xri")
 disabled = true
 debug_color = Color(0.863057, 0.324582, 0.406829, 0.42)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1, -10)
-shape = SubResource("RectangleShape2D_nqb4r")
-
-[node name="Detection_area" type="Area2D" parent="."]
-visible = false
-collision_mask = 4
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Detection_area"]
-position = Vector2(28.5, -7)
-shape = SubResource("RectangleShape2D_s8ftq")
-debug_color = Color(0.670257, 0.498251, 0.297161, 0.42)
-
 [node name="Attack_timer" type="Timer" parent="."]
 wait_time = 0.7
 
@@ -443,6 +494,24 @@ libraries = {
 "": SubResource("AnimationLibrary_tvof1")
 }
 
-[connection signal="body_entered" from="Detection_area" to="." method="_on_detection_area_body_entered"]
-[connection signal="body_exited" from="Detection_area" to="." method="_on_detection_area_body_exited"]
+[node name="MyHurtBox" type="Area2D" parent="."]
+visible = false
+script = ExtResource("5_rk7sj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MyHurtBox"]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_n5et1")
+debug_color = Color(0.662662, 0.50654, 0.234741, 0.42)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.5, -10)
+shape = SubResource("RectangleShape2D_pxt81")
+
+[node name="Player_detection" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player_detection"]
+position = Vector2(9.5, -11)
+shape = SubResource("RectangleShape2D_cbu6w")
+debug_color = Color(0.734714, 0.465003, 0.193696, 0.42)
+
 [connection signal="timeout" from="Attack_timer" to="." method="_on_attack_timer_timeout"]

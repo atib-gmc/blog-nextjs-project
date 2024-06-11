@@ -11,6 +11,10 @@ func _ready():
 func _on_area_entered(hitbox:MyHitBox):
 	if hitbox == null:
 		return
+	var attack = Attack.new()
+	attack.damage = hitbox.Damage
+	attack.position = hitbox.global_position
+	attack.knockback_force = hitbox.knockback_force
 	if owner.has_method("take_damage"):
-		owner.take_damage(hitbox.Damage)
+		owner.take_damage(attack)
 		

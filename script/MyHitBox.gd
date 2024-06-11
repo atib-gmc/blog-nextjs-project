@@ -1,6 +1,7 @@
 class_name MyHitBox
 extends Area2D
-@export var Damage := 1
+@export var Damage := 10
+@export var knockback_force:= 40
 
 
 

@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://iyttqxp3aurd" path="res://assets/2d/background4b.png" id="6_q8drr"]
 [ext_resource type="Texture2D" uid="uid://dae5d7kaesof4" path="res://assets/2d/background3.png" id="7_7bjbd"]
 [ext_resource type="PackedScene" uid="uid://2mbqeu2345ru" path="res://scene/kill_zone.tscn" id="8_1fyl6"]
-[ext_resource type="PackedScene" uid="uid://bn3mfna22kgms" path="res://scene/Zombie.tscn" id="10_2uh3r"]
+[ext_resource type="PackedScene" uid="uid://ltmadlga84cg" path="res://scene/Zombie_2.tscn" id="10_wqprv"]
 [ext_resource type="PackedScene" uid="uid://dq7vu0xovvkfr" path="res://scene/player_2.tscn" id="11_f8yre"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_mu34l"]
@@ -2942,7 +2942,6 @@ color = Color(0.735797, 0.735797, 0.735797, 1)
 rotation = 0.886627
 color = Color(0.581589, 0.664615, 0.835747, 1)
 shadow_enabled = true
-shadow_filter = 2
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_25e6p")
@@ -3028,12 +3027,6 @@ position = Vector2(-41, 40)
 position = Vector2(135, 464)
 shape = SubResource("WorldBoundaryShape2D_8p6xs")
 
-[node name="Zombie3" parent="." instance=ExtResource("10_2uh3r")]
-position = Vector2(185, 93)
-
-[node name="Zombie" parent="." instance=ExtResource("10_2uh3r")]
-position = Vector2(457, 157)
-
 [node name="Node" type="Node" parent="."]
 
 [node name="Apple2" parent="Node" instance=ExtResource("1_w7i5h")]
@@ -3066,3 +3059,8 @@ occluder = SubResource("OccluderPolygon2D_7uapa")
 
 [node name="LightOccluder2D3" type="LightOccluder2D" parent="LightOccluder"]
 occluder = SubResource("OccluderPolygon2D_3bf4p")
+
+[node name="Node2" type="Node" parent="."]
+
+[node name="Zombie_2" parent="." instance=ExtResource("10_wqprv")]
+position = Vector2(369, 155)
